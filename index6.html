@@ -1,0 +1,232 @@
+<!DOCTYPE html>
+<!--
+To change this license header, choose License Headers in Project Properties.
+To change this template file, choose Tools | Templates
+and open the template in the editor.
+-->
+<html>
+    <head>
+        <title>HD-Scanner-Plus</title>
+        <meta charset="utf-8">
+        <link rel="stylesheet" href="./stylesheets/bootstrap.css">
+        <meta content="Scanning the entire blockchain based on xpub or seed phrase" name="description">
+        <meta content="width=device-width, initial-scale=1.0" name="viewport">
+        <meta content="bockchain scanner " name="description">
+        <meta content="John Salmassi" name="author">
+        <link type="image/x-icon" rel="icon" href="data:image/x-icon;base64,iVBORw0KGgoAAAANSUhEUgAAABAAAAAQEAYAAABPYyMiAAAABmJLR0T///////8JWPfcAAAACXBIWXMAAABIAAAASABGyWs+AAAAF0lEQVRIx2NgGAWjYBSMglEwCkbBSAcACBAAAeaR9cIAAAAASUVORK5CYII=">
+
+        <style>
+            body {
+                padding-bottom: 32px;
+                font-family: "Helvetica Neue",Helvetica,Arial,sans-serif;
+                font-size: 14px;
+                line-height: 1.42857143;
+                color: #333;
+                background-color: #f4f0d8;
+            }
+            .form-control[readonly] {
+                cursor: text;
+            }
+            .no-border {
+                border: 0;
+                box-shadow: inset 0 1px 1px rgba(0,0,0,.0);
+                -webkit-box-shadow: inset 0 1px 1px rgba(0,0,0,.0);
+            }
+            .version {
+                /* position: absolute;
+                top: 5px;
+                right: 5px; */
+                text-align: center;
+            }
+            .test {
+                text-align: center;
+            }
+            .select {
+                color: red;
+                padding: 5px;
+                width: 150px;
+                font-size: 15px;
+            }
+            .go_button {
+                color: red;
+                padding: 5px;
+                width: 180px;
+                font-size: 20px;
+                border-radius: 10px 10px 10px 10px;
+                -ms-border-radius: 10px 10px 10px 10px;
+                -moz-border-radius: 10px 10px 10px 10px;
+                -webkit-border-radius: 10px 10px 10px 10px;
+                -khtml-border-radius: 10px 10px 10px 10px;
+
+                box-shadow: 15px 15px 23px #000;
+                -webkit-box-shadow: 10px 10px 15px rgb(15, 37, 37);
+                -moz-box-shadow: 10px 10px 15px rgb(20, 54, 54); 
+            }
+        </style>
+    </head>
+    <body>
+        <div class="container">
+            <h1 class="text-center">HD-Scanner-Plus</h1>
+            <p class="version">v0.1</p>
+            <hr>
+            <div class="row">
+                <!-- <form  action="submitedData" role="form"> -->
+                <form  action="sse.html" role="form">
+                    <div class="test">
+                        <br><br>
+                        <table border="0" width="1" cellspacing="1" cellpadding="1" style="width:100%" > 
+                            <tbody>
+                                <tr>
+                                    <td style="width:50%; padding: 5px; text-align:right;">How many change addresses to generate to scan:</td>
+                                    <td style="width:50%; padding: 5px; text-align:left;"><select id="select1" name="select1" class="select" >
+                                            <option value="10">10</option>
+                                            <option value="15">15</option>
+                                            <option value="20">20</option>
+                                            <option value="50">50</option>
+                                            <option value="15" selected>15   </option>
+                                        </select></td>
+                                </tr>
+                                <tr>
+                                    <td style="width:50%; padding: 5px; text-align:right;">Scan From block:</td>
+                                    <td style="width:50%; padding: 5px; text-align:left;"><input type="text" name="blockHeightFrom" id="blockHeightFrom"  value="" size="17" required/></td>
+                                </tr>
+                                <tr>
+                                    <td style="width:50%; padding: 5px; text-align:right;"> Scan to block:</td>
+                                    <td style="width:50%; padding: 5px; text-align:left;"><input type="text" name="scanToBlockHeight" id="scanToBlockHeight"  value="" size="17" required/></td>
+                                </tr>
+                                <tr>
+                                    <td style="width:50%; padding: 5px; text-align:right;">Address Index From:</td>
+                                    <td style="width:50%; padding: 5px; text-align:left;"> <input type="text" name="addrIdxFrom" id="addrIdxFrom"  value="" size="17" required/></td>
+                                </tr>
+                                <tr>
+                                    <td style="width:50%; padding: 5px; text-align:right;">Address Index To:</td>
+                                    <td style="width:50%; padding: 5px; text-align:left;"><input type="text" name="addrIdxTo" id="addrIdxTo"  value="" size="17" required/></td>
+                                </tr>
+                                <tr>
+                                    <td style="width:50%; padding: 5px; text-align: center;"><input type="hidden" name="addrEnc" id="addrEnc"  value="'p2pkh'|'p2wpkh-in-p2sh'|'p2wpkh'" size="40" />  </td>
+                                    <td style="width:50%; padding: 5px; text-align: center;"><input type="hidden" name="placeHolder" id="placeHolder"  value="placeHolder" size="40" />  </td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+
+                    <hr>
+                    <div class="text-center">
+                        <div>
+                            <label for="radio0"> words</label>
+                            <input type="radio" name="radio" id="radio0" value="radio0" onclick="radioCheck()" />
+                            <input type="text" name="words" id="words"  value="" size="100" /><br>
+                            <hr>
+                        </div>
+                        <div>
+                            <label for="radio1"> electrum-words</label>
+                            <input type="radio" name="radio" id="radio1" value="radio1" onclick="radioCheck()" />
+                            <input type="text" name="electrum_words" id="electrum_words" value="" size="100" /><br><br>
+                            <hr>
+                        </div>
+                        <div>
+                            <label for="radio2"> electrum-words-segwit</label>
+                            <input type="radio" name="radio" id="radio2" value="radio2" onclick="radioCheck()" />
+                            <input type="text" name="electrum_words_segwit" id="electrum_words_segwit" value="" size="100" /><br><br>
+                            <hr>
+                        </div>
+                        <div>
+                            <label for="radio3"> xpub</label>
+                            <input type="radio" name="radio" id="radio3" value="radio3" onclick="radioCheck()" />
+                            <input type="text" name="xpub" id="xpub" value="" size="100" /><br><br>
+                            <hr>
+                        </div>
+                    </div>    
+                    <div class="text-center"> 
+                        <button class="go_button" >Go</button>
+                        <!-- <button class="darkshadow" >Go</button> -->
+                    </div>     
+                </form>
+            </div>
+            <hr>
+            <dl>
+                <dt>Scan From block</dt>
+                <dd>- Enter an educated guess, ie, a block number near the date when tx took place, this will cut the time in scanning.</dd>
+                <dt>Scan to block</dt>
+                <dd>- Same as above, if left blank or zero entered, it will defualt to current block number, which measn long scan.</dd>
+                <dt>Address Index From</dt>
+                <dd>- It is recommented to enter zero here.</dd>
+                <dt>Address Index To</dt>
+                <dd>- This could be any reasonable number.</dd>
+            </dl>
+        </div> <!--- container -->
+
+        <script>
+            inputsLength = document.getElementsByTagName("INPUT");
+            for (i = 0; i < inputsLength.length; i++) {
+                input = document.getElementsByTagName("INPUT")[i];
+                /*  if (input.type === "text" && input.attributes.getNamedItem("disabled")){ */
+                if (input.type === "text" && input.attributes.getNamedItem("disabled")
+                        & !(input.attributes.getNamedItem("name").value === "scanToBlockHeight")
+                        & !(input.attributes.getNamedItem("name").value === "blockHeightFrom")
+                        & !(input.attributes.getNamedItem("name").value === "addrEnc")
+                        & !(input.attributes.getNamedItem("name").value === "addrIdxFrom")
+                        & !(input.attributes.getNamedItem("name").value === "addrIdxTo")) {
+                    input.attributes.removeNamedItem("disabled");
+                }
+                /* else if (input.type === "text" &!  input.attributes.getNamedItem("disabled")) { */
+                else if (input.type === "text" & !input.attributes.getNamedItem("disabled")
+                        & !(input.attributes.getNamedItem("name").value === "addrIdxFrom")
+                        & !(input.attributes.getNamedItem("name").value === "addrIdxTo")
+                        & !(input.attributes.getNamedItem("name").value === "addrEnc")
+                        & !(input.attributes.getNamedItem("name").value === "scanToBlockHeight")
+                        & !(input.attributes.getNamedItem("name").value === "blockHeightFrom")) {
+                    var dsbl = document.createAttribute("disabled");
+                    input.attributes.setNamedItem(dsbl);
+                }
+            }
+
+            function radioCheck() {
+                inputTagsLength = document.getElementsByTagName("INPUT");
+                console.log("number of input elements from radioCheck() is:  " + document.getElementsByTagName("INPUT").length);
+
+                for (i = 0; i < inputTagsLength.length; i++) {
+                    input = document.getElementsByTagName("INPUT")[i];
+
+                    if (input.type === "radio" && input.checked) {
+
+                        if (input.nextElementSibling.attributes.getNamedItem("disabled")) {
+                            console.log(" we are in if() of radioCheck()");
+                            input.nextElementSibling.attributes.removeNamedItem("disabled");
+                            disableTextBox(input.nextElementSibling.attributes.getNamedItem("name").value);
+                        } else {
+                            var dsbl = document.createAttribute("disabled");
+                            console.log(" we are in else() of radioCheck()");
+                            input.nextElementSibling.attributes.setNamedItem(dsbl);
+                        }
+                        ;
+
+                        console.log("inpuTags of radio next element is: " + input.nextElementSibling.name);
+                        console.log("inpuTags of radio type are: " + input.id);
+                    }
+                }
+
+            }
+
+            function disableTextBox(enabledBox) {
+                inputsLength = document.getElementsByTagName("INPUT");
+                for (i = 0; i < inputsLength.length; i++) {
+                    input = document.getElementsByTagName("INPUT")[i];
+
+                    /* if (input.type === "text"  && input.attributes.getNamedItem("name").value !== enabledBox) { */
+                    if (input.type === "text" && input.attributes.getNamedItem("name").value !== enabledBox
+                            & !(input.attributes.getNamedItem("name").value === "scanToBlockHeight")
+                            & !(input.attributes.getNamedItem("name").value === "addrEnc")
+                            & !(input.attributes.getNamedItem("name").value === "addrIdxFrom")
+                            & !(input.attributes.getNamedItem("name").value === "addrIdxTo")
+                            & !(input.attributes.getNamedItem("name").value === "blockHeightFrom")) {
+                        var dsbl = document.createAttribute("disabled");
+                        console.log(" we are in else()...");
+                        input.attributes.setNamedItem(dsbl);
+                    }
+                }
+            }
+
+        </script>
+    </body>    
+</html>

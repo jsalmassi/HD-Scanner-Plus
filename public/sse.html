@@ -1,0 +1,297 @@
+<!DOCTYPE html>
+
+<html>
+
+<head>
+
+    <meta charset="utf-8" />
+
+    <title>HD-Scanner-Plus</title>
+
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/event-source-polyfill/0.0.9/eventsource.min.js"></script>
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+    <style>
+        div.scroll {
+              background-color: #fed9ff;
+              width: 600px;
+              height: 100px;
+              overflow: scroll;
+              text-align: justify;
+              padding: 20px;
+            }
+           
+            div.scroll {
+                background-color: #F8F8F8;
+                width: 600px;
+                height: 250px;
+                overflow: scroll;
+                text-align: justify;
+                /* padding: 80px; */
+                padding: 5px;
+				margin-left: 20%;
+				
+
+            }
+			 div.scroll2 {
+                background-color: #F8F8F8;
+                width: 600px;
+                height: 250px;
+                overflow: scroll;
+                text-align: justify;
+                padding: 5px;
+				margin-left: 20%;
+				
+
+            }
+
+			div.errors2 {
+                background-color:#ffffff;
+                width: 600px;
+                height: 250px;
+                overflow: scroll;
+                text-align: left;
+                padding: 5px;
+				margin-left: 20%;
+                color:red;
+            }
+			.cancelButton {
+                background-color:#ED5207;
+                width: 150px;
+                height: 50px;
+                text-align: center;
+                font-size:large;
+                color:white;
+            }
+			
+			div.mainDiv {
+                background-color:  #f4f0d8
+               
+
+            }
+			th,td {
+            padding: 10px;
+            text-align: center;
+            }
+
+            .stop_button {
+                color: red;
+                padding: 5px;
+                width: 180px;
+                font-size: 20px;
+                border-radius: 10px 10px 10px 10px;
+                -ms-border-radius: 10px 10px 10px 10px;
+                -moz-border-radius: 10px 10px 10px 10px;
+                -webkit-border-radius: 10px 10px 10px 10px;
+                -khtml-border-radius: 10px 10px 10px 10px;
+                
+                box-shadow: 15px 15px 23px #000;
+                -webkit-box-shadow: 10px 10px 15px rgb(15, 37, 37);
+                -moz-box-shadow: 10px 10px 15px rgb(20, 54, 54);
+                }
+        
+          </style>
+
+
+    <script>
+        const es = new EventSource('http://localhost:3000/sse');//that is sse_index.js
+        const listener = function (event) {
+            const type = event.type;
+            window.console.log(`${type}: ${event.data || es.url}`);
+            es.onmessage = function (event) {
+                if (event.data.startsWith("Processing")) {
+                    $(".scroll").prepend(" <br><b>" + event.data + "</b>.");
+                } else if (event.data.startsWith("Error") || event.data.startsWith("Warning")) {
+                    $(".errors2").append(" <br><b>" + event.data + "</b>.");
+                } else $(".scroll2").append(" <br><b>" + event.data + "</b>.");
+            };
+            es.onerror = function (event) {
+                console.log("event.data:  " + event.data);
+                //alert('Ooops.... error from sse');
+                //document.getElementById("error_text_input").value = event.data;
+            };
+            if (type === 'result') {
+                es.close();
+            }
+        };
+
+        es.addEventListener('open', listener);
+        es.addEventListener('message', listener);
+        es.addEventListener('error', listener);
+        es.addEventListener('result', listener);
+
+        function stop() {
+            // Preventing button from clicking anymore.
+            document.getElementById("cancelButton").disabled = true;
+
+            var req = new XMLHttpRequest();
+            var url = '/stopModule?'; // noting is being sent, this is just a trigger
+            req.open('GET', url, true); // set this to POST if you would like
+            req.addEventListener('load', onLoad);
+            req.addEventListener('error', onError);
+            req.send();
+
+            function onLoad() {
+                var response = this.responseText;
+                //var parsedResponse = JSON.parse(response);
+                console.log(response + "response after sending AJAX for stop()");
+                document.getElementById("cancelOutput").innerHTML = this.responseText;
+            }
+
+            function onError() {
+                // handle error here, print message perhaps
+                console.log('error receiving async AJAX call for stop()...');
+            }
+        }
+
+        var convertToGoodString = function (badString) {
+            var string = '';
+            var vars = badString.split('+');
+            for (var i = 0; i < vars.length; i++) {
+                if (typeof vars[i] == 'string') {
+                    string += vars[i] + ' ';
+                    //console.log("count is " + i)
+                }
+                else {
+                    console.log("bad stuff....");
+                }
+            }
+            return string;
+        }
+
+
+//------------------replaceConsole()------------------------- 
+        var consoleMessage = '';
+        function replaceConsole() {
+            var realConsoleLog = console.log;
+            console.log = function () {
+                //  var message = [].join.call(arguments, " ");
+                consoleMessage = [].join.call(arguments, " ");
+                //$(".output").text(message);
+                realConsoleLog.apply(console, arguments);
+            };
+        }
+        replaceConsole();
+//--------------------------------------------------------
+    </script>
+
+</head>
+
+<body style="height: 1000px;">
+    <div class="mainDiv" style="height:100%">
+        <table border="0" width="1" cellspacing="1" cellpadding="1" style="width:100%">
+            <thead>
+                <tr>
+                    <th>Progress of the scan:</th>
+                    <th>Other info:</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr>
+                    <td style="width:50%" padding: 5px; text-align: center;>
+                        <div class='scroll'></div>
+                    </td>
+                    <td style="width:50%" padding: 5px; text-align: center;>
+                        <div class='scroll2'></div>
+                    </td>
+                </tr>
+                <tr>
+                    <td style="width:50%" padding: 5px; text-align: center;>
+                        <!-- <div  this <td> is just a palce holder
+    			   		</div> -->
+                    </td>
+
+
+                    <td style="width:50%" padding: 5px; text-align: center;>
+                        <div><b>Errors:<b></div>
+    </div>
+    </td>
+    </tr>
+    <tr>
+        <td style="width:50%" padding: 5px; text-align: center;>
+            <div class='selectedParams2'><label for="myText1"><b>You've selected the following for the scan: </b></label>
+                <input type="text" id="myText1" name="myText1" value="" size="40" /><br><br>
+                <input type="text" id="myText2" name="myText2" value="" size="80" /><br>
+            </div>
+        </td>
+
+
+        <td style="width:50%" padding: 5px; text-align: center;>
+            <div class='errors2'>All is good so far..</div>
+        </td>
+    </tr>
+    <tr>
+        <td padding: 30px;>
+            <!---<form name="testForm" action="testPage.html"> 
+                            <input type="submit" value="Cancel the scan" name="cancelButton" class='cancelButton' onclick= stop()/>
+                       </form> -->
+            <input type="button" id="cancelButton" class='stop_button' value="stop.." name="stop" onclick=stop() />
+        </td>
+        <td padding: 20px; rowspan="2" colspan="2" title="" headers="helloHeaders"><strong><b>Generated addresses
+                    files: <b> </strong> <br>
+            <a target="_blank" href="allAddrAndPrivReceive.html">allAddrAndPrivReceive.html</a><br>
+            <a target="_blank" href="allAddrAndPrivChange.html">allAddrAndPrivChange.html</a>
+        </td>
+    </tr>
+
+    </tbody>
+    </table>
+    <hr>
+    <p id=cancelOutput> <strong>Upon a successful finish, and not a 'stopped finish' you will find the results of the
+            <br> scan
+            in /HD-Scanner-Plus/output dir for your inspection.</strong></p>
+    </div>
+
+    <script>
+
+        var query = window.location.search.substring(1);
+        var req = new XMLHttpRequest();
+        var url = '/createDynaWallet?' + query;
+        req.open('GET', url, true); // set this to POST if you would like
+        req.addEventListener('load', onLoad);
+        req.addEventListener('error', onError);
+        req.send();
+
+        function onLoad() {
+            var response = this.responseText;
+        }
+
+        function onError() {
+            // handle error here, print message perhaps
+            console.log('error receiving async AJAX call');
+        }
+
+        var scanToBlockHeight;
+        var vars = query.split('&');
+        for (var i = 0; i < vars.length; i++) {
+            var pair = vars[i].split('=');
+
+            if (pair[0] == "addrIdxFrom") var addrIdxFrom = pair[1];
+            if (pair[0] == "addrIdxTo") {
+                var addrIdxTo = pair[1];
+                if (addrIdxFrom >= addrIdxTo)
+                    $(".errors2").append(" <br><b>Error: 'Address Index To' can not be less than 'Address Index From'. <br> \
+                      click 'stop', fix the problem and re-run. </b> ");
+            }
+
+            if (pair[0] == "blockHeightFrom") var blockHeightFrom = pair[1];
+            if (pair[0] == "scanToBlockHeight") {
+                // var scanToBlockHeight = pair[1];
+                scanToBlockHeight = pair[1];
+                console.log("blockHeightFrom is: " + blockHeightFrom);
+                console.log("scanToBlockHeight is: " + scanToBlockHeight);
+/*                     if (blockHeightFrom >= scanToBlockHeight){ // this had me going for long while... the solution was 
+                                                                  // to wrap these to vars in Number objects for the comparison
+                                                                  // to correctly evaluate.
+ */                    if (Number(scanToBlockHeight) <= Number(blockHeightFrom)) {
+                    $(".errors2").append(" <br><b>Warning: 'Scan To block' can not be less than or equal to 'Scan From block'. <br> \
+                      click 'stop', fix the problem and re-run, or it will default to current block height! </b> ");
+                }
+            }
+            document.getElementById("myText1").value = pair[0];
+            document.getElementById("myText2").value = convertToGoodString(pair[1]);
+        }
+    </script>
+</body>
+</html>
