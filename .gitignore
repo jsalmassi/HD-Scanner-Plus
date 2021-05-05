@@ -10,3 +10,6 @@ wallets.js
 public/allAddrAndPrivChange.html
 public/allAddrAndPrivReceive.html
 output
+# packageJson_creator.js, a helper util
+packageJson_creator.js
+

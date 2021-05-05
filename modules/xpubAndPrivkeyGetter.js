@@ -3,7 +3,6 @@ const bitcoin = require('bitcoinjs-lib')
 const HDKey = require ('hdkey') // from cryptocoinjs/hdkey  https://github.com/cryptocoinjs/hdkey
 var base58check = require('bs58check')
 const parseXPub = require('./parse-xpub')
-const wallets = require('../wallets')
 const mn = require('electrum-mnemonic') // for electrum stuff
 
 let hdkey 

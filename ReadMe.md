@@ -41,4 +41,7 @@ Please make sure that tab titled "HD-Scanner-Plus" is closed, from previous sess
 or 
 **node --inspect=9229 ./bin/www** (if using vscode ide)
 
+```
+Donate 18ANu3L1LfbTsHtnt8mWnkk6o4cBj6GqhC
+
  
