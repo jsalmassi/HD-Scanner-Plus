@@ -43,6 +43,6 @@ or
 
 ```
 Donate: 18ANu3L1LfbTsHtnt8mWnkk6o4cBj6GqhC
-Comments? please email jsalmassi@yahoo.com
+Comments? please email me at jsalmassi@yahoo.com
 
  
