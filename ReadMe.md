@@ -43,7 +43,7 @@ or
 **node --inspect=9229 ./bin/www** (if using vscode ide)
 
 ```
-Donate: 18ANu3L1LfbTsHtnt8mWnkk6o4cBj6GqhC
+Donate, thank you: 18ANu3L1LfbTsHtnt8mWnkk6o4cBj6GqhC
 Comments? please email me at jsalmassi@yahoo.com
 
  
