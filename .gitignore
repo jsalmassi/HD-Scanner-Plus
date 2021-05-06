@@ -6,6 +6,8 @@ node_modules
 wallets.js
 # .vscode
 .vscode
+# this is dev notes..
+modules/myReadMe
 # Generated stuff from previous runs
 public/allAddrAndPrivChange.html
 public/allAddrAndPrivReceive.html

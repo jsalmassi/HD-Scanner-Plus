@@ -97,3 +97,11 @@ issues:
 
  8-  //'p2pkh'|'p2wpkh-in-p2sh'|'p2wpkh' this in the wallets.js or in our new dynamicWallet.js
     needs to be looked at, in other words, so far we are dealing with p2wpkh and p2pkh only?!
+
+ ---------------------------------------------------------------
+ Important: On the release version (on GitHub), in sse_index.js I commented out
+ the debug line as follows:
+ // const child= fork('modules/scanner',[],{execArgv:['--inspect-brk=40894']});
+    const child= fork('modules/scanner',[],{execArgv:[]});
+ Ther may have been a cleaner way of doing this, like removing the {execArgv:[]} all
+ together, instead of passing it empty.      

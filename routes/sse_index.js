@@ -22,7 +22,8 @@ function replaceConsole() {
 router.get('/', (req, res, next) => {
     const sse = SSE(res);
     var i =0;
-    const child= fork('modules/scanner',[],{execArgv:['--inspect-brk=40894']});
+    // const child= fork('modules/scanner',[],{execArgv:['--inspect-brk=40894']});
+    const child= fork('modules/scanner',[],{execArgv:[]});
     var scannerMessage;
     i=i+1
     child.on('message', (message) => {
