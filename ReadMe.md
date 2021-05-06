@@ -36,6 +36,7 @@ MAX_ADDRESSES_PER_ITERATION - max number of addresses per a scan iteration (defa
 
 #### Run
 Please make sure that tab titled "HD-Scanner-Plus" is closed, from previous session if any.
+Also make sure that bitcoin core is running.
 
 **node ./bin/www** 
 or 
