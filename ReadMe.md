@@ -35,13 +35,15 @@ BITCOIND_RPCUSER and BITCOIND_RPCPASSWORD - user/pass to access Bitcoin RPC serv
 MAX_ADDRESSES_PER_ITERATION - max number of addresses per a scan iteration (default: 100000)
 
 #### Run
-Please make sure that tab titled "HD-Scanner-Plus" is closed, from previous session if any.
+Please make sure that any tab titled "HD-Scanner-Plus" in your browser,from previous session is closed.
+Also make sure that bitcoin core is running.
 
 **node ./bin/www** 
 or 
 **node --inspect=9229 ./bin/www** (if using vscode ide)
 
 ```
-Donate 18ANu3L1LfbTsHtnt8mWnkk6o4cBj6GqhC
+Donate: 18ANu3L1LfbTsHtnt8mWnkk6o4cBj6GqhC
+Comments? please email me at jsalmassi@yahoo.com
 
  

@@ -9,6 +9,7 @@ wallets.js
 # Generated stuff from previous runs
 public/allAddrAndPrivChange.html
 public/allAddrAndPrivReceive.html
+dynamicWallet2.js
 output
 # packageJson_creator.js, a helper util
 packageJson_creator.js
